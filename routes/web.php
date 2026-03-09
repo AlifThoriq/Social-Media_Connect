@@ -19,5 +19,17 @@ Route::view('profile', 'profile')
 
 Volt::route('/explore', 'explore')->middleware(['auth'])->name('explore');
 
+// Route Rahasia untuk Eksekusi Perintah Terminal dari Browser
+Route::get('/hajar-db', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            '--force' => true
+        ]);
+        return 'Database Neon.tech Sukses Terhajar dan Terisi Data!';
+    } catch (\Exception $e) {
+        return 'Waduh error bro: ' . $e->getMessage();
+    }
+});
 
 require __DIR__.'/auth.php';

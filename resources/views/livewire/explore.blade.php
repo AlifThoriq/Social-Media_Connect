@@ -4,14 +4,14 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Follow;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Url; // Untuk menyimpan tab di URL
+use Livewire\Attributes\Url;
 
 new #[Layout('layouts.app')] class extends Component {
     #[Url]
     public string $search = '';
     
     #[Url]
-    public string $tab = 'posts'; // Default tab adalah Posts ala IG
+    public string $tab = 'posts';
     
     public function setTab($tabName)
     {
@@ -36,7 +36,6 @@ new #[Layout('layouts.app')] class extends Component {
         $users = collect();
         $posts = collect();
 
-        // Gunakan 'like' karena Anda menggunakan MySQL lokal. (Jika balik ke Postgres, ganti jadi 'ilike')
         if ($this->tab === 'users') {
             $users = User::where('id', '!=', auth()->id())
                 ->when($this->search, function ($query) {
@@ -52,8 +51,8 @@ new #[Layout('layouts.app')] class extends Component {
                 ->when($this->search, function ($query) {
                     $query->where('content', 'like', '%' . $this->search . '%');
                 })
-                ->whereNotNull('image_url') // Hanya tampilkan postingan bergambar di explore
-                ->inRandomOrder() // Acak agar explore selalu fresh
+                ->whereNotNull('image_url')
+                ->inRandomOrder()
                 ->paginate(20);
         }
 
@@ -123,21 +122,10 @@ new #[Layout('layouts.app')] class extends Component {
             </div>
         @endif
 
-       @if($tab === 'posts')
+        @if($tab === 'posts')
             <div class="columns-2 md:columns-3 gap-4 px-2"> 
                 @forelse($posts as $p)
                     <livewire:post-item :post="$p" layout="grid" :key="'explore-'.$p->id" />
-                @empty
-                    <div class="col-span-full text-center py-10 text-gray-500">Tidak ada postingan yang cocok.</div>
-                @endforelse
-            </div>
-            <div class="mt-6 px-2">{{ $posts->links() }}</div>
-        @endif
-                                <span class="text-white text-xs font-bold truncate">{{ $p->user->name }}</span>
-                            </div>
-                            <p class="text-white text-xs line-clamp-2">{{ $p->content }}</p>
-                        </div>
-                    </div>
                 @empty
                     <div class="col-span-full text-center py-10 text-gray-500">Tidak ada postingan yang cocok.</div>
                 @endforelse

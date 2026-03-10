@@ -30,7 +30,7 @@ COPY . /var/www/html
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader 
 
 # Build frontend (Tailwind/Alpine)
 RUN npm install && npm run build

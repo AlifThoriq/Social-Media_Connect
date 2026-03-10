@@ -123,19 +123,16 @@ new #[Layout('layouts.app')] class extends Component {
             </div>
         @endif
 
-        @if($tab === 'posts')
-            <div class="columns-2 md:columns-3 gap-4 px-2 space-y-4">
+       @if($tab === 'posts')
+            <div class="columns-2 md:columns-3 gap-4 px-2"> 
                 @forelse($posts as $p)
-                    <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-sm break-inside-avoid">
-                        <img src="{{ $p->image_url }}" alt="Explore Image" class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500">
-                        
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                            <div class="flex items-center gap-2 mb-2">
-                                @if($p->user->avatar_url)
-                                    <img src="{{ $p->user->avatar_url }}" class="w-6 h-6 rounded-full border border-white">
-                                @else
-                                    <div class="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center text-[10px] font-bold">{{ substr($p->user->name, 0, 1) }}</div>
-                                @endif
+                    <livewire:post-item :post="$p" layout="grid" :key="'explore-'.$p->id" />
+                @empty
+                    <div class="col-span-full text-center py-10 text-gray-500">Tidak ada postingan yang cocok.</div>
+                @endforelse
+            </div>
+            <div class="mt-6 px-2">{{ $posts->links() }}</div>
+        @endif
                                 <span class="text-white text-xs font-bold truncate">{{ $p->user->name }}</span>
                             </div>
                             <p class="text-white text-xs line-clamp-2">{{ $p->content }}</p>

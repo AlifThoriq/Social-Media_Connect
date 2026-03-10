@@ -3,10 +3,6 @@
       x-data="{ darkMode: localStorage.getItem('darkMode') === 'true', sidebarOpen: true }" 
       x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))" 
       x-bind:class="{ 'dark': darkMode }">
-      <style>
-            [x-cloak] { display: none !important; }
-        </style>
-    </head>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,6 +15,18 @@
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+        
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <style>
+            [x-cloak] { display: none !important; }
+            /* Tambahan agar scrollbar lebih elegan */
+            ::-webkit-scrollbar { width: 6px; }
+            ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+            .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        </style>
+        
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     
@@ -26,7 +34,7 @@
         
         <div class="min-h-screen w-full flex">
             
-            <aside :class="sidebarOpen ? 'w-64 px-4' : 'w-20 px-2'" class="hidden md:flex flex-col sticky top-0 h-screen py-6 border-r border-gray-100 dark:border-gray-800 transition-all duration-300 ease-in-out bg-white dark:bg-[#121212] z-20">
+            <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="hidden md:flex flex-col sticky top-0 h-screen py-6 border-r border-gray-100 dark:border-gray-800 transition-all duration-300 ease-in-out bg-white dark:bg-[#121212] z-20">
                 <livewire:layout.navigation />
             </aside>
 
@@ -37,11 +45,15 @@
             </main>
 
             <aside class="w-80 hidden lg:block sticky top-0 h-screen py-6 px-6 border-l border-gray-100 dark:border-gray-800 bg-white dark:bg-[#121212]">
-    
-    <livewire:suggested-users />
-
-</aside>
+                <livewire:suggested-users />
+            </aside>
 
         </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                AOS.init({ once: true, offset: 50 });
+            });
+        </script>
     </body>
 </html>
